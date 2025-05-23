@@ -109,22 +109,21 @@ const deletePost = async (req, res, next) => {
 };
 
 const getPost = async (req, res, next) => {
-  console.log({ id: req.params.id });
   try {
-    const post = await Post.findById(req.params.id).populate([
+    const post = await Post.findOne({ slug: req.params.slug }).populate([
       {
         path: "user",
         select: ["avatar", "name"],
       },
     ]);
-    console.log(post);
 
     if (!post) {
-      const error = new Error("Post was not found");
-      return next(error);
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
     }
 
-    return res.json(post);
+    res.json(post);
   } catch (error) {
     next(error);
   }

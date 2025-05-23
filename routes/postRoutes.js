@@ -11,13 +11,17 @@ const { authGuard, adminGuard } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+// Create a post
 router.route("/post").post(authGuard, adminGuard, createPost);
 
+// Get all posts
 router.route("/posts").get(getAllPosts);
 
+// Routes using slug
 router
-  .route("/post/:id")
+  .route("/post/:slug")
+  .get(getPost)
   .put(authGuard, adminGuard, updatePost)
   .delete(authGuard, adminGuard, deletePost);
-router.route("/post/:id").get(getPost);
+
 module.exports = router;
